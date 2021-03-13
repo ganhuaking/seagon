@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Seagon\Quotation;
+use App\Seagon\Slot;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +16,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton(Quotation::class, function () {
+            return new Quotation(
+                Storage::disk('local')
+            );
+        });
+
+        $this->app->singleton(Slot::class, function () {
+            return new Slot(
+                Storage::disk('local')
+            );
+        });
     }
 
     /**
