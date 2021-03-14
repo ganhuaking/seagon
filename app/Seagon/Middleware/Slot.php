@@ -5,6 +5,7 @@ namespace App\Seagon\Middleware;
 use App\Seagon\Slot as SlotModel;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use LINE\LINEBot;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 
@@ -32,6 +33,8 @@ class Slot
         $replyToken = $request->input('events.0.replyToken');
 
         if ('師公第一人提出' === $text) {
+            Log::debug('Slot handled');
+
             $textMessageBuilder = new TextMessageBuilder($this->slot->random());
 
             return $this->bot->replyMessage($replyToken, $textMessageBuilder);

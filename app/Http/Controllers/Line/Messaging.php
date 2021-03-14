@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Line;
 
 use App\Seagon\Middleware\Quotation;
+use App\Seagon\Middleware\Secret;
 use App\Seagon\Middleware\Slot;
 use Illuminate\Http\Request;
 use Illuminate\Pipeline\Pipeline;
@@ -22,6 +23,7 @@ class Messaging
         $middleware = [
             Quotation::class,
             Slot::class,
+            Secret::class,
         ];
 
         $response = (new Pipeline(app()))
@@ -32,6 +34,8 @@ class Messaging
                 $replyToken = $request->input('events.0.replyToken');
 
                 if (preg_match('/師公！/', $text)) {
+                    Log::debug('Menu handled');
+
                     $textMessageBuilder = new TextMessageBuilder("想聽師公講什麼嗎？請輸入下面關鍵字讓師公來講講幹話\n\n1. 師公語錄\n2. 師公第一人提出");
 
                     return $bot->replyMessage($replyToken, $textMessageBuilder);

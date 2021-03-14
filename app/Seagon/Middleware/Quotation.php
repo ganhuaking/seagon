@@ -5,6 +5,7 @@ namespace App\Seagon\Middleware;
 use App\Seagon\Quotation as QuotationModel;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use LINE\LINEBot;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 
@@ -32,6 +33,8 @@ class Quotation
         $replyToken = $request->input('events.0.replyToken');
 
         if ('師公語錄' === $text) {
+            Log::debug('Quotation handled');
+
             $textMessageBuilder = new TextMessageBuilder($this->quotation->random());
 
             return $this->bot->replyMessage($replyToken, $textMessageBuilder);
