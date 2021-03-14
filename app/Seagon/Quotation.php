@@ -21,6 +21,6 @@ class Quotation
 
     public function random(): string
     {
-        return $this->list->random();
+        return $this->list->random()['text'];
     }
 }
