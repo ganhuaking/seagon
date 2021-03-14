@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Line;
 
-use App\Seagon\Quotation;
-use App\Seagon\Slot;
+use App\Seagon\Middleware\Quotation;
+use App\Seagon\Middleware\Slot;
 use Illuminate\Http\Request;
+use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\Log;
-use LINE\Laravel\Facade\LINEBot;
+use LINE\LINEBot;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 
 /**
@@ -14,30 +15,28 @@ use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
  */
 class Messaging
 {
-    public function __invoke(Request $request, Slot $slot, Quotation $quotation)
+    public function __invoke(Request $request, LINEBot $bot)
     {
         Log::debug('Request content: ' . json_encode($request->all()));
 
-        $text = trim($request->input('events.0.message.text'));
-        $replyToken = $request->input('events.0.replyToken');
+        $middleware = [
+            Quotation::class,
+            Slot::class,
+        ];
 
-        if (preg_match('/師公！/', $text)) {
-            $textMessageBuilder = new TextMessageBuilder("想聽師公講什麼嗎？請輸入下面關鍵字讓師公來講講幹話\n\n1. 師公語錄\n2. 師公第一人提出");
+        $response = (new Pipeline(app()))
+            ->send($request)
+            ->through($middleware)
+            ->then(function (Request $request) use ($bot) {
+                $text = trim($request->input('events.0.message.text'));
+                $replyToken = $request->input('events.0.replyToken');
 
-            $response = LINEBot::replyMessage($replyToken, $textMessageBuilder);
-        }
+                if (preg_match('/師公！/', $text)) {
+                    $textMessageBuilder = new TextMessageBuilder("想聽師公講什麼嗎？請輸入下面關鍵字讓師公來講講幹話\n\n1. 師公語錄\n2. 師公第一人提出");
 
-        if ('師公語錄' === $text) {
-            $textMessageBuilder = new TextMessageBuilder($quotation->random());
-
-            $response = LINEBot::replyMessage($replyToken, $textMessageBuilder);
-        }
-
-        if ('師公第一人提出' === $text) {
-            $textMessageBuilder = new TextMessageBuilder($slot->random());
-
-            $response = LINEBot::replyMessage($replyToken, $textMessageBuilder);
-        }
+                    return $bot->replyMessage($replyToken, $textMessageBuilder);
+                }
+            });
 
         if (isset($response) && !$response->isSucceeded()) {
             Log::error('LINE return error: ' . $response->getRawBody());
