@@ -19,8 +19,8 @@ class Quotation
         );
     }
 
-    public function random(): string
+    public function random(): array
     {
-        return $this->list->random()['text'];
+        return $this->list->random();
     }
 }

@@ -35,7 +35,18 @@ class Quotation
         if ('師公語錄' === $text) {
             Log::debug('Quotation handled');
 
-            $textMessageBuilder = new TextMessageBuilder($this->quotation->random());
+            $textMessageBuilder = new TextMessageBuilder($this->quotation->random()['text']);
+
+            return $this->bot->replyMessage($replyToken, $textMessageBuilder);
+        }
+
+        if ('師公語錄ref' === mb_strtolower($text)) {
+            Log::debug('Quotation handled');
+
+            $random = $this->quotation->random();
+            $textMessageBuilder = new TextMessageBuilder(
+                $random['text'] . "\n\nRef: " . $random['ref']
+            );
 
             return $this->bot->replyMessage($replyToken, $textMessageBuilder);
         }
