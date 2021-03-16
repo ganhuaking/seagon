@@ -41,12 +41,20 @@ class Quotation
         }
 
         if ('師公語錄ref' === mb_strtolower($text)) {
-            Log::debug('Quotation handled');
+            Log::debug('Quotation ref handled');
 
             $random = $this->quotation->random();
             $textMessageBuilder = new TextMessageBuilder(
                 $random['text'] . "\n\nRef: " . $random['ref']
             );
+
+            return $this->bot->replyMessage($replyToken, $textMessageBuilder);
+        }
+
+        if (preg_match('/^師公語錄(\d+)$/', $text, $match)) {
+            Log::debug('Quotation specify handled');
+
+            $textMessageBuilder = new TextMessageBuilder($this->quotation->get($match[1])['text']);
 
             return $this->bot->replyMessage($replyToken, $textMessageBuilder);
         }

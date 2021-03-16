@@ -19,6 +19,11 @@ class Quotation
         );
     }
 
+    public function get(int $index): array
+    {
+        return $this->list->get($index);
+    }
+
     public function random(): array
     {
         return $this->list->random();
