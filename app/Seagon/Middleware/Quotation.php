@@ -59,6 +59,17 @@ class Quotation
             return $this->bot->replyMessage($replyToken, $textMessageBuilder);
         }
 
+        if (preg_match('/^師公語錄(\d+)ref$/', $text, $match)) {
+            Log::debug('Quotation specify handled');
+
+            $get = $this->quotation->get($match[1]);
+            $textMessageBuilder = new TextMessageBuilder(
+                $get['text'] . "\n\nRef: " . $get['ref']
+            );
+
+            return $this->bot->replyMessage($replyToken, $textMessageBuilder);
+        }
+
         return $next($request);
     }
 }
