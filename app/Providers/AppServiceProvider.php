@@ -21,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(Quotation::class, function () {
             return new Quotation(
+                $this->app->make(LINEBot::class),
                 Storage::disk('local'),
                 $this->app->make(Slot::class)
             );
