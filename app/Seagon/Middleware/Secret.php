@@ -56,6 +56,6 @@ class Secret
 
         Log::debug('Secret threshold: ' . $rand);
 
-        return $rand < 30;
+        return $rand < 90;
     }
 }
