@@ -4,7 +4,6 @@ namespace App\Seagon;
 
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use LINE\LINEBot;
 
@@ -37,6 +36,13 @@ class Quotation
     public function get(array $events, int $index): array
     {
         return $this->decorator($events, $this->list->get($index));
+    }
+
+    public function find(array $events, string $keyword): array
+    {
+        return $this->decorator($events, $this->list->filter(function ($item) use ($keyword) {
+            return Str::contains($item['text'], $keyword);
+        })->random());
     }
 
     public function random(array $events): array

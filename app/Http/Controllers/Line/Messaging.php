@@ -36,7 +36,7 @@ class Messaging
                 if (preg_match('/師公！/', $text)) {
                     Log::debug('Menu handled');
 
-                    $textMessageBuilder = new TextMessageBuilder("想聽師公講什麼嗎？請輸入下面關鍵字讓師公來講講幹話\n\n1. 師公語錄\n2. 師公第一人提出");
+                    $textMessageBuilder = new TextMessageBuilder("想聽師公講什麼嗎？請輸入下面關鍵字讓師公來講講幹話\n\n1. 師公語錄\n2.師公語錄話XX，XX關鍵字任你帶\n3. 師公第一人提出");
 
                     return $bot->replyMessage($replyToken, $textMessageBuilder);
                 }
