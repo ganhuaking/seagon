@@ -75,10 +75,7 @@ class Quotation
         if (preg_match('/^師公語錄話(.*)$/', $text, $match)) {
             Log::debug('Quotation search handled');
 
-            $get = $this->quotation->find($events, $match[1]);
-            $textMessageBuilder = new TextMessageBuilder(
-                $get['text'] . "\n\nRef: " . $get['ref']
-            );
+            $textMessageBuilder = new TextMessageBuilder($this->quotation->find($events, $match[1])['text']);
 
             return $this->bot->replyMessage($replyToken, $textMessageBuilder);
         }
