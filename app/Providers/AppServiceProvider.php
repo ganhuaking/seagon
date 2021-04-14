@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Seagon\Middleware\Theory;
 use App\Seagon\Quotation;
 use App\Seagon\Slot;
 use Illuminate\Support\Facades\Storage;
@@ -29,6 +30,13 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(Slot::class, function () {
             return new Slot(
+                Storage::disk('local')
+            );
+        });
+
+        $this->app->singleton(Theory::class, function () {
+            return new Theory(
+                $this->app->make(LINEBot::class),
                 Storage::disk('local')
             );
         });
