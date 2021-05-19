@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Line;
 use App\Seagon\Middleware\Quotation;
 use App\Seagon\Middleware\Secret;
 use App\Seagon\Middleware\Slot;
+use App\Seagon\Middleware\Stock;
 use App\Seagon\Middleware\Theory;
 use Illuminate\Http\Request;
 use Illuminate\Pipeline\Pipeline;
@@ -25,6 +26,7 @@ class Messaging
             Quotation::class,
             Slot::class,
             Theory::class,
+            Stock::class,
             Secret::class,
         ];
 
