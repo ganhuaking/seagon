@@ -34,8 +34,6 @@ class Stock
                 $stockText = '舉例來說，我就買了富邦金，現在每年為我創造額外的股息收入來源';
             }
 
-
-
             $textMessageBuilder = new TextMessageBuilder($stockText . "\n" . '本金...本金你不會自己想辦法賺嗎？
 你不會自己跟銀行借錢嗎？
 你不會想辦法說服別人投資你或是請你操盤？
