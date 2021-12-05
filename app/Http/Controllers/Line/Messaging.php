@@ -22,6 +22,10 @@ class Messaging
     {
         Log::debug('Request content: ' . json_encode($request->all()));
 
+        if (!env('LINE_MESSAGEING_TOGGLE')) {
+            return response()->noContent();
+        }
+
         $middleware = [
             Quotation::class,
             Slot::class,
