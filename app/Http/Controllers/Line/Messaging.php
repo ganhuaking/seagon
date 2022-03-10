@@ -20,10 +20,25 @@ class Messaging
 {
     public function __invoke(Request $request, LINEBot $bot)
     {
+        // "groupId":"C67fc7032fb5c1cb77e276f3582710637"
         Log::debug('Request content: ' . json_encode($request->all()));
 
         if (!env('LINE_MESSAGEING_TOGGLE')) {
             return response()->noContent();
+        }
+
+        if ($list = env('LINE_MESSAGING_GROUP_ALLOW_LIST')) {
+            $notFound = true;
+
+            foreach (explode(',', $list) as $group) {
+                if ($request->input('events.0.source.groupId') === $group) {
+                    $notFound = false;
+                }
+            }
+
+            if ($notFound) {
+                return response()->noContent();
+            }
         }
 
         $middleware = [
