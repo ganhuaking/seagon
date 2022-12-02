@@ -1,5 +1,6 @@
 *
 !public/
 !.gitignore
+!inspire.json
 !quotations.json
 !slot.json

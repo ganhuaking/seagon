@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Line;
 
+use App\Seagon\Middleware\Inspire;
 use App\Seagon\Middleware\Quotation;
 use App\Seagon\Middleware\Secret;
 use App\Seagon\Middleware\Slot;
@@ -43,6 +44,7 @@ class Messaging
 
         $middleware = [
             Quotation::class,
+            Inspire::class,
             Slot::class,
             Theory::class,
             Stock::class,
@@ -56,10 +58,10 @@ class Messaging
                 $text = trim($request->input('events.0.message.text'));
                 $replyToken = $request->input('events.0.replyToken');
 
-                if (preg_match('/師公！/', $text)) {
+                if (str_contains($text, '師公！')) {
                     Log::debug('Menu handled');
 
-                    $textMessageBuilder = new TextMessageBuilder("想聽師公講什麼嗎？請輸入下面關鍵字讓師公來講講幹話\n\n1. 師公語錄\n2. 師公語錄話XX，XX關鍵字任你帶\n3. 師公第一人提出\n4. 師公專業");
+                    $textMessageBuilder = new TextMessageBuilder("想聽師公講什麼嗎？請輸入下面關鍵字讓師公來講講幹話\n\n1. 師公語錄\n2. 師公語錄話XX，XX關鍵字任你帶\n3. 師公第一人提出\n4. 師公專業\n5. 師公情話 / 師公情話給xx");
 
                     return $bot->replyMessage($replyToken, $textMessageBuilder);
                 }
