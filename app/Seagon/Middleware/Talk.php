@@ -30,16 +30,28 @@ class Talk
         if (Str::startsWith($text, '師公聊聊')) {
             Log::debug('Talk handled');
 
+            $t = trim(Str::replace('師公聊聊', '', $text));
+
+            $prompt = <<<EOL
+Human:{$t}
+AI:
+EOL;
+
             try {
                 $response = Http::withToken(config('openai.api_key'))
                     ->timeout(60)
                     ->post('https://api.openai.com/v1/completions', [
                         'model' => 'text-davinci-003',
-                        'prompt' => Str::replace('師公聊聊', '', $text),
+                        'prompt' => $prompt,
+                        'temperature' => 0.7,
                         'max_tokens' => 2000,
+                        'top_p' => 1,
+                        'frequency_penalty' => 0.0,
+                        'presence_penalty' => 0.6,
+                        'stop' => ['Human:', 'AI:'],
                     ]);
 
-                $reply = $response->json('choices.0.text');
+                $reply = trim($response->json('choices.0.text'));
             } catch (Throwable $e) {
                 $reply = '師公聊聊壞了：' . $e->getMessage();
             }
