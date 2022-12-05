@@ -24,8 +24,6 @@ class Inspire
 
     public function __invoke(Request $request, Closure $next)
     {
-        $events = $request->all();
-
         $text = trim($request->input('events.0.message.text'));
         $replyToken = $request->input('events.0.replyToken');
 
