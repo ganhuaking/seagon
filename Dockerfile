@@ -1,7 +1,12 @@
-FROM ghcr.io/mileschou/php-tester:8.1-alpine
+FROM ghcr.io/104lab/lazy-octane:8.1-alpine
 
 # 全域設定
-WORKDIR /source
+WORKDIR /usr/app/src
+
+RUN docker-php-ext-install -j $(getconf _NPROCESSORS_ONLN) sockets
+
+# Install Composer v2
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
 # 安裝程式依賴套件
 COPY composer.* ./
@@ -11,4 +16,4 @@ RUN composer install --no-dev --no-scripts && composer clear-cache
 COPY . .
 RUN composer run post-autoload-dump
 
-CMD ["php", "artisan", "serve", "--host", "0.0.0.0"]
+CMD ["php", "artisan", "octane:start", "--host", "0.0.0.0"]
