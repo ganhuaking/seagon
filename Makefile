@@ -1,5 +1,9 @@
-debug:
-	heroku config:set APP_DEBUG=true LOG_LEVEL=debug
+build:
+	docker-compose build --no-cache --progress=plain
 
-prod:
-	heroku config:set APP_DEBUG=false LOG_LEVEL=info
+up:
+	docker-compose up -d
+	docker-compose logs -f
+
+down:
+	docker-compose down -v
