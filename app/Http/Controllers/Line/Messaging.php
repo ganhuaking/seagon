@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Line;
 
 use App\Seagon\Middleware\Inspire;
+use App\Seagon\Middleware\NathanRecord;
 use App\Seagon\Middleware\Quotation;
 use App\Seagon\Middleware\Secret;
 use App\Seagon\Middleware\Slot;
@@ -49,6 +50,7 @@ class Messaging
                 // UserID == Seagon
                 if ($seagonId === $request->input('events.0.source.userId')) {
                     $middleware = [
+                        NathanRecord::class,
                         TalkNathan::class,
                     ];
 

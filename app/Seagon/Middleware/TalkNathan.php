@@ -5,7 +5,9 @@ namespace App\Seagon\Middleware;
 use App\Seagon\Inspire as InspireModel;
 use App\Seagon\Random;
 use Closure;
+use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -17,14 +19,23 @@ class TalkNathan
 {
     private LINEBot $bot;
 
+    private Repository $cache;
+
     public function __construct(LINEBot $bot)
     {
         $this->bot = $bot;
+        $this->cache = Cache::store();
     }
 
     public function __invoke(Request $request, Closure $next)
     {
-        if (!Random::threshold(25)) {
+        $percentage = 25;
+
+        if ($this->cache->has('nathan_said')) {
+            $percentage = 100;
+        }
+
+        if (!Random::threshold($percentage)) {
             return $next($request);
         }
 
