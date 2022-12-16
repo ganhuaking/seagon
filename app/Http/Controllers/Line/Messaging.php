@@ -11,6 +11,7 @@ use App\Seagon\Middleware\Talk;
 use App\Seagon\Middleware\TalkNathan;
 use App\Seagon\Middleware\Theory;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot;
@@ -21,15 +22,19 @@ use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
  */
 class Messaging
 {
-    public function __invoke(Request $request, LINEBot $bot)
+    public function __invoke(Request $request, LINEBot $bot): Response
     {
+        $seagonId = env('SEAGON_ID');
+
         // "groupId":"C67fc7032fb5c1cb77e276f3582710637"
         Log::debug('Request content: ' . json_encode($request->all()));
 
+        // 開關沒開的話，就回 204
         if (!env('LINE_MESSAGEING_TOGGLE')) {
             return response()->noContent();
         }
 
+        // 確認白名單的群組
         if ($list = env('LINE_MESSAGING_GROUP_ALLOW_LIST')) {
             $notFound = true;
 
@@ -39,17 +44,21 @@ class Messaging
                 }
             }
 
+            // 不在白名單
             if ($notFound) {
-                $middleware = [
-                    TalkNathan::class,
-                ];
+                // UserID == Seagon
+                if ($seagonId === $request->input('events.0.source.userId')) {
+                    $middleware = [
+                        TalkNathan::class,
+                    ];
 
-                (new Pipeline(app()))
-                    ->send($request)
-                    ->through($middleware)
-                    ->then(function () {
-                        return null;
-                    });
+                    (new Pipeline(app()))
+                        ->send($request)
+                        ->through($middleware)
+                        ->then(function () {
+                            return null;
+                        });
+                }
 
                 return response()->noContent();
             }

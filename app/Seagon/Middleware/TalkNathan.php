@@ -3,6 +3,7 @@
 namespace App\Seagon\Middleware;
 
 use App\Seagon\Inspire as InspireModel;
+use App\Seagon\Random;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -16,14 +17,17 @@ class TalkNathan
 {
     private LINEBot $bot;
 
-    public function __construct(LINEBot $bot, InspireModel $inspire)
+    public function __construct(LINEBot $bot)
     {
         $this->bot = $bot;
-        $this->inspire = $inspire;
     }
 
     public function __invoke(Request $request, Closure $next)
     {
+        if (!Random::threshold(25)) {
+            return $next($request);
+        }
+
         $text = trim($request->input('events.0.message.text'));
         $replyToken = $request->input('events.0.replyToken');
 

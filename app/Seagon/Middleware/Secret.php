@@ -2,6 +2,7 @@
 
 namespace App\Seagon\Middleware;
 
+use App\Seagon\Random;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -25,7 +26,7 @@ class Secret
         $text = trim($request->input('events.0.message.text'));
         $replyToken = $request->input('events.0.replyToken');
 
-        if ($this->keyword($text) && $this->threshold()) {
+        if ($this->keyword($text) && Random::threshold(80)) {
             Log::debug('Secret handled');
 
             $textMessageBuilder = new TextMessageBuilder('秘密');
@@ -42,20 +43,6 @@ class Secret
      */
     private function keyword(string $text): bool
     {
-        return preg_match('/師公/', $text) && preg_match('/投資/', $text);
-    }
-
-    /**
-     * 30%
-     *
-     * @return bool
-     */
-    private function threshold(): bool
-    {
-        $rand = rand(0, 100);
-
-        Log::debug('Secret threshold: ' . $rand);
-
-        return $rand < 90;
+        return str_contains($text, '師公') && str_contains($text, '投資');
     }
 }
