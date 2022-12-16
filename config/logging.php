@@ -1,10 +1,5 @@
 <?php
 
-use DiscordHandler\DiscordHandler;
-use Monolog\Handler\NullHandler;
-use Monolog\Handler\StreamHandler;
-use Monolog\Handler\SyslogUdpHandler;
-
 return [
 
     /*
@@ -51,15 +46,6 @@ return [
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
-        ],
-
-        'discord' => [
-            'driver' => 'monolog',
-            'handler' => DiscordHandler::class,
-            'with' => [
-                'webHooks' => env('DISCORD_WEBHOOK_URL'),
-            ],
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
