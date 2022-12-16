@@ -8,6 +8,7 @@ use App\Seagon\Middleware\Secret;
 use App\Seagon\Middleware\Slot;
 use App\Seagon\Middleware\Stock;
 use App\Seagon\Middleware\Talk;
+use App\Seagon\Middleware\TalkNathan;
 use App\Seagon\Middleware\Theory;
 use Illuminate\Http\Request;
 use Illuminate\Pipeline\Pipeline;
@@ -39,6 +40,17 @@ class Messaging
             }
 
             if ($notFound) {
+                $middleware = [
+                    TalkNathan::class,
+                ];
+
+                (new Pipeline(app()))
+                    ->send($request)
+                    ->through($middleware)
+                    ->then(function () {
+                        return null;
+                    });
+
                 return response()->noContent();
             }
         }
