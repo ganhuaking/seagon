@@ -29,7 +29,7 @@ class TalkNathan
 
     public function __invoke(Request $request, Closure $next)
     {
-        $percentage = 25;
+        $percentage = 75;
 
         if ($this->cache->has('nathan_said')) {
             $percentage = 100;
