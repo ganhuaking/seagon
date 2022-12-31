@@ -14,4 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/check', function() {
+    return 'OK';
+});
+
 Route::post('/line/messaging', Messaging::class);

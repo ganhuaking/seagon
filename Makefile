@@ -1,4 +1,7 @@
 build:
+	docker-compose build --progress=plain
+
+rebuild:
 	docker-compose build --no-cache --progress=plain
 
 up:
