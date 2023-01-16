@@ -42,8 +42,13 @@ class TalkNathan
         $text = trim($request->input('events.0.message.text'));
         $replyToken = $request->input('events.0.replyToken');
 
-        if (Str::startsWith($text, '@雷N')) {
-            Log::debug('Talk Nathan handled');
+        $luckyUser = [
+            '@雷N',
+            '@Gson',
+        ];
+
+        if (Str::contains($text, '@雷N')) {
+            Log::debug('Talk Lucky User handled');
 
             $t = trim(Str::replace('@雷N', '', $text));
 
