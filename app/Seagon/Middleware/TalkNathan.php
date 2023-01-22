@@ -45,6 +45,7 @@ class TalkNathan
         $luckyUser = [
             '@雷N',
             '@Gson',
+            '@Yang',
         ];
 
         if (Str::contains($text, '@雷N')) {
