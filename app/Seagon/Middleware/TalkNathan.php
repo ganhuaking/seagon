@@ -49,10 +49,14 @@ class TalkNathan
             '@James',
         ];
 
-        if (Str::contains($text, '@雷N')) {
+        if (Str::contains($text, $luckyUser)) {
             Log::debug('Talk Lucky User handled');
 
-            $t = trim(Str::replace('@雷N', '', $text));
+            $t = $text;
+
+            foreach ($luckyUser as $user) {
+                $t = trim(Str::replace($user, '', $t));
+            }
 
             $prompt = <<<EOL
 Human:{$t}
