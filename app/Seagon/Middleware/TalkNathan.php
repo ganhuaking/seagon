@@ -46,6 +46,7 @@ class TalkNathan
             '@雷N',
             '@Gson',
             '@Yang',
+            '@James',
         ];
 
         if (Str::contains($text, '@雷N')) {
