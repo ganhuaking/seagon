@@ -9,7 +9,7 @@ use App\Seagon\Middleware\Secret;
 use App\Seagon\Middleware\Slot;
 use App\Seagon\Middleware\Stock;
 use App\Seagon\Middleware\Talk;
-use App\Seagon\Middleware\TalkNathan;
+use App\Seagon\Middleware\ChatGPT;
 use App\Seagon\Middleware\Theory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -50,8 +50,7 @@ class Messaging
                 // UserID == Seagon
                 if ($seagonId === $request->input('events.0.source.userId')) {
                     $middleware = [
-                        NathanRecord::class,
-                        TalkNathan::class,
+                        ChatGPT::class,
                     ];
 
                     (new Pipeline(app()))

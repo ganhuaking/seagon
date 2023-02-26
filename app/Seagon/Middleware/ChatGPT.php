@@ -2,7 +2,6 @@
 
 namespace App\Seagon\Middleware;
 
-use App\Seagon\Inspire as InspireModel;
 use App\Seagon\Random;
 use Closure;
 use Illuminate\Contracts\Cache\Repository;
@@ -15,27 +14,21 @@ use LINE\LINEBot;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use Throwable;
 
-class TalkNathan
+class ChatGPT
 {
     private LINEBot $bot;
 
-    private Repository $cache;
+    private int $percentage;
 
     public function __construct(LINEBot $bot)
     {
         $this->bot = $bot;
-        $this->cache = Cache::store();
+        $this->percentage = 75;
     }
 
     public function __invoke(Request $request, Closure $next)
     {
-        $percentage = 75;
-
-        if ($this->cache->has('nathan_said')) {
-            $percentage = 100;
-        }
-
-        if (!Random::threshold($percentage)) {
+        if (!Random::threshold($this->percentage)) {
             return $next($request);
         }
 
@@ -78,12 +71,12 @@ EOL;
                     ]);
 
                 $reply = trim($response->json('choices.0.text'));
-            } catch (Throwable $e) {
-                $reply = '@雷N 壞了：' . $e->getMessage();
+            } catch (Throwable) {
+                $reply = '你的問題';
             }
 
             if (empty($reply)) {
-                $reply = '@雷N 壞了';
+                $reply = '你的問題';
             }
 
             $textMessageBuilder = new TextMessageBuilder($reply);
