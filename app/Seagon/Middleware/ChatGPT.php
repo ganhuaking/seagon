@@ -37,9 +37,11 @@ class ChatGPT
 
         $luckyUser = [
             '@雷N',
+            '@Eileen',
             '@Gson',
-            '@Yang',
             '@James',
+            '@SU',
+            '@Yang',
         ];
 
         if (Str::contains($text, $luckyUser)) {
