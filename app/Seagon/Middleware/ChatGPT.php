@@ -37,6 +37,7 @@ class ChatGPT
 
         $luckyUser = [
             '@雷N',
+            '@承雋',
             '@Calvin',
             '@Eileen',
             '@Gson',
