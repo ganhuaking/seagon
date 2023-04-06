@@ -28,6 +28,9 @@ class ChatGPT
 
     public function __invoke(Request $request, Closure $next)
     {
+        // 沒 token ，先關掉
+        return $next($request);
+
         if (!Random::threshold($this->percentage)) {
             return $next($request);
         }
