@@ -53,11 +53,11 @@ EOL;
 
                 $reply = trim($response->json('choices.0.text'));
             } catch (Throwable $e) {
-                $reply = '師公聊聊壞了：' . $e->getMessage();
+                $reply = '師公聊聊壞了 你的問題：' . $e->getMessage();
             }
 
             if (empty($reply)) {
-                $reply = '師公聊聊壞了';
+                $reply = '師公聊聊壞了 你的問題';
             }
 
             $textMessageBuilder = new TextMessageBuilder($reply);
