@@ -4,6 +4,7 @@ namespace App\Seagon\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use LINE\LINEBot;
 use LINE\LINEBot\MessageBuilder\ImageMessageBuilder;
@@ -11,6 +12,10 @@ use LINE\LINEBot\MessageBuilder\ImageMessageBuilder;
 class Image
 {
     private LINEBot $bot;
+
+    private const IMAGE_MAPPING = [
+        '錢從天降' => '000001',
+    ];
 
     public function __construct(LINEBot $bot)
     {
@@ -22,17 +27,21 @@ class Image
         $text = trim($request->input('events.0.message.text'));
         $replyToken = $request->input('events.0.replyToken');
 
-        if (str_contains($text, '錢從天降')) {
-            Log::info('Image handled');
+        $imageId = Collection::make(self::IMAGE_MAPPING)->first(
+            fn($_, $key) => str_contains($text, $key),
+        );
 
-            $imageMessageBuilder = new ImageMessageBuilder(
-                'https://seagon.shang-chuan.com/images/000001.jpg',
-                'https://seagon.shang-chuan.com/images/000001_thumb.jpg',
-            );
-
-            return $this->bot->replyMessage($replyToken, $imageMessageBuilder);
+        if (null === $imageId) {
+            return $next($request);
         }
 
-        return $next($request);
+        Log::info('Image handled');
+
+        $imageMessageBuilder = new ImageMessageBuilder(
+            "https://seagon.shang-chuan.com/images/$imageId.jpg",
+            "https://seagon.shang-chuan.com/images/{$imageId}_thumb.jpg",
+        );
+
+        return $this->bot->replyMessage($replyToken, $imageMessageBuilder);
     }
 }
