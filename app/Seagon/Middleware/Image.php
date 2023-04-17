@@ -15,6 +15,7 @@ class Image
 
     private const IMAGE_MAPPING = [
         '錢從天降' => '000001',
+        '文章有寫' => '000002',
     ];
 
     public function __construct(LINEBot $bot)
