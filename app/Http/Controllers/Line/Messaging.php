@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Line;
 
+use App\Seagon\Middleware\Image;
 use App\Seagon\Middleware\Inspire;
 use App\Seagon\Middleware\NathanRecord;
 use App\Seagon\Middleware\Quotation;
@@ -66,6 +67,7 @@ class Messaging
         }
 
         $middleware = [
+            Image::class,
             Talk::class,
             Quotation::class,
             Inspire::class,
