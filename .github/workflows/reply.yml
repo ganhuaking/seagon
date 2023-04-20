@@ -35,4 +35,4 @@ jobs:
           command: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
 
       - name: Do reply
-        run: php artisan reply ${{ github.event.inputs.reply_token }} ${{ github.event.inputs.text }}
+        run: php artisan reply ${{ github.event.inputs.reply_token }} '${{ github.event.inputs.text }}'
