@@ -29,7 +29,7 @@ class Messaging
         $seagonId = env('SEAGON_ID');
 
         // "groupId":"C67fc7032fb5c1cb77e276f3582710637"
-        Log::debug('Request content: ' . json_encode($request->all()));
+        Log::notice('Request content: ' . json_encode($request->all(), JSON_UNESCAPED_UNICODE));
 
         // 開關沒開的話，就回 204
         if (!env('LINE_MESSAGEING_TOGGLE')) {

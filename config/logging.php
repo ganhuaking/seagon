@@ -1,5 +1,7 @@
 <?php
 
+use DiscordHandler\DiscordHandler;
+
 return [
 
     /*
@@ -33,7 +35,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['single', 'discord'],
             'ignore_exceptions' => false,
         ],
 
@@ -47,6 +49,15 @@ return [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
+        ],
+
+        'discord' => [
+            'driver' => 'monolog',
+            'handler' => DiscordHandler::class,
+            'with' => [
+                'webHooks' => env('DISCORD_WEBHOOK_URL'),
+            ],
+            'level' => env('LOG_LEVEL', 'notice'),
         ],
 
         'emergency' => [
