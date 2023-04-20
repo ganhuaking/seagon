@@ -4,11 +4,10 @@ namespace App\Seagon\Middleware;
 
 use App\Seagon\Random;
 use Closure;
-use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Lottery;
 use Illuminate\Support\Str;
 use LINE\LINEBot;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
@@ -28,8 +27,12 @@ class ChatGPT
 
     public function __invoke(Request $request, Closure $next)
     {
-        // 沒 token ，先關掉
-        return $next($request);
+        $replyToken = $request->input('events.0.replyToken');
+
+        // 沒 ChatGPT 的扣打了，先隨機 10% 機率回「你的問題」
+        return Lottery::odds(0 / 100)()
+            ? $this->bot->replyMessage($replyToken, new TextMessageBuilder('你的問題'))
+            : $next($request);
 
         if (!Random::threshold($this->percentage)) {
             return $next($request);
