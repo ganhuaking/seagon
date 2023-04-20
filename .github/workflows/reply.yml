@@ -16,14 +16,32 @@ jobs:
     env:
       LINE_BOT_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_BOT_CHANNEL_ACCESS_TOKEN}}
       LINE_BOT_CHANNEL_SECRET: ${{ secrets.LINE_BOT_CHANNEL_SECRET}}
+      extensions: intl, pcov
+      key: cache-v1
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Setup cache environment
+        id: extcache
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: ${{ env.extensions }}
+          key: ${{ env.key }}
+
+      - name: Cache extensions
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.extcache.outputs.dir }}
+          key: ${{ steps.extcache.outputs.key }}
+          restore-keys: ${{ steps.extcache.outputs.key }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.1
+          extensions: ${{ env.extensions }}
           tools: composer:v2
           coverage: none
 
