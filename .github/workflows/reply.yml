@@ -1,0 +1,38 @@
+name: Reply
+
+on:
+  workflow_dispatch:
+    inputs:
+      reply_token:
+        description: 'Reply Token'
+        required: true
+      text:
+        description: 'Text'
+        required: true
+
+jobs:
+  default:
+    runs-on: ubuntu-latest
+    env:
+      LINE_BOT_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_BOT_CHANNEL_ACCESS_TOKEN}}
+      LINE_BOT_CHANNEL_SECRET: ${{ secrets.LINE_BOT_CHANNEL_SECRET}}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          tools: composer:v2
+          coverage: none
+
+      - name: Install dependencies
+        uses: nick-invision/retry@v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 5
+          command: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
+
+      - name: Do reply
+        run: php artisan reply ${{ github.event.inputs.reply_token }} ${{ github.event.inputs.text }}
