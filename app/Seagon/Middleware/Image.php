@@ -17,6 +17,7 @@ class Image
         '錢從天降' => '000001',
         '文章有寫' => '000002',
         '元氣十足' => '000003',
+        '元來這就是愛情' => '000004',
     ];
 
     public function __construct(LINEBot $bot)
