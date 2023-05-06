@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Line;
 
+use App\Seagon\Middleware\ChatGPT;
 use App\Seagon\Middleware\Image;
 use App\Seagon\Middleware\Inspire;
-use App\Seagon\Middleware\NathanRecord;
 use App\Seagon\Middleware\Quotation;
 use App\Seagon\Middleware\Secret;
 use App\Seagon\Middleware\Slot;
 use App\Seagon\Middleware\Stock;
 use App\Seagon\Middleware\Talk;
-use App\Seagon\Middleware\ChatGPT;
 use App\Seagon\Middleware\Theory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -29,7 +28,11 @@ class Messaging
         $seagonId = env('SEAGON_ID');
 
         // "groupId":"C67fc7032fb5c1cb77e276f3582710637"
-        Log::notice('Request content: ' . json_encode($request->all(), JSON_UNESCAPED_UNICODE));
+        Log::debug('Request content: ' . json_encode($request->all(), JSON_UNESCAPED_UNICODE));
+
+        if ($request->has('events.0.message.text')) {
+            $this->textLog($request, $bot);
+        }
 
         // 開關沒開的話，就回 204
         if (!env('LINE_MESSAGEING_TOGGLE')) {
@@ -98,5 +101,38 @@ class Messaging
         }
 
         return response()->noContent();
+    }
+
+    private function textLog(Request $request, LINEBot $bot): void
+    {
+        $seagonId = env('SEAGON_ID');
+
+        $groupId = $request->input('events.0.source.groupId');
+        $group = match ($groupId) {
+            'C67fc7032fb5c1cb77e276f3582710637' => 'Fork',
+            'Cee77733c527ac65600a34e6d5c487517' => 'Origin',
+            default => $groupId,
+        };
+
+        $userId = $request->input('events.0.source.userId');
+        $user = match ($userId) {
+            $seagonId => 'Seagon',
+            default => $this->getUser($userId, $bot),
+        };
+
+        $text = $request->input('events.0.message.text');
+
+        Log::notice("$group - $user : $text");
+    }
+
+    private function getUser(string $userId, LINEBot $bot): string
+    {
+        $profile = $bot->getProfile($userId);
+
+        if (404 !== $profile->getHTTPStatus()) {
+            return $profile->getJSONDecodedBody()['displayName'];
+        } else {
+            return $userId;
+        }
     }
 }
