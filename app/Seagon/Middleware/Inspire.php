@@ -2,6 +2,7 @@
 
 namespace App\Seagon\Middleware;
 
+use App\Seagon\Shemale as ShemaleModel;
 use App\Seagon\Inspire as InspireModel;
 use Closure;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ class Inspire
     private LINEBot $bot;
 
     private InspireModel $inspire;
+    private ShemaleModel $shemale;
 
     public function __construct(LINEBot $bot, InspireModel $inspire)
     {
@@ -27,10 +29,12 @@ class Inspire
         $text = trim($request->input('events.0.message.text'));
         $replyToken = $request->input('events.0.replyToken');
 
+        $shemale = $this->shemale->random();
+
         if ('師公情話' === $text) {
             Log::debug('Inspire handled');
 
-            $text = str_replace('%%user%%', '@Ruby', $this->inspire->random());
+            $text = str_replace('%%user%%', '@' . $shemale, $this->inspire->random());
 
             $textMessageBuilder = new TextMessageBuilder($text);
 
