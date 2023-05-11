@@ -18,10 +18,11 @@ class Inspire
     private InspireModel $inspire;
     private ShemaleModel $shemale;
 
-    public function __construct(LINEBot $bot, InspireModel $inspire)
+    public function __construct(LINEBot $bot, InspireModel $inspire, ShemaleModel $shemale)
     {
         $this->bot = $bot;
         $this->inspire = $inspire;
+        $this->shemale = $shemale;
     }
 
     public function __invoke(Request $request, Closure $next)
