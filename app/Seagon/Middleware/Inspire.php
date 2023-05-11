@@ -2,8 +2,8 @@
 
 namespace App\Seagon\Middleware;
 
-use App\Seagon\Inspire as InspireModel;
 use App\Seagon\Shemale as ShemaleModel;
+use App\Seagon\Inspire as InspireModel;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -16,7 +16,7 @@ class Inspire
     private LINEBot $bot;
 
     private InspireModel $inspire;
-    private ShamekeModel $shemale;
+    private ShemaleModel $shemale;
 
     public function __construct(LINEBot $bot, InspireModel $inspire)
     {
@@ -28,14 +28,13 @@ class Inspire
     {
         $text = trim($request->input('events.0.message.text'));
         $replyToken = $request->input('events.0.replyToken');
-        
-        $replaced = shemale->list;
-        array_push($replaced, '%%user%%');
+
+        $shemale = $this->shemale->random();
 
         if ('師公情話' === $text) {
             Log::debug('Inspire handled');
-            
-            $text = str_replace($replaced, '@Ruby', $this->inspire->random());
+
+            $text = str_replace('%%user%%', '@' . $shemale, $this->inspire->random());
 
             $textMessageBuilder = new TextMessageBuilder($text);
 
@@ -45,7 +44,7 @@ class Inspire
         if (Str::startsWith($text, '師公情話給')) {
             Log::debug('Inspire to handled');
 
-            $text = str_replace($replaced, '@' . Str::replace('師公情話給', '', $text), $this->inspire->random());
+            $text = str_replace('%%user%%', '@' . Str::replace('師公情話給', '', $text), $this->inspire->random());
 
             $textMessageBuilder = new TextMessageBuilder($text);
 
