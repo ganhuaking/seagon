@@ -1,0 +1,55 @@
+name: Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      text:
+        description: 'Text'
+        required: true
+      user:
+        description: 'User'
+        default: 'Tester'
+        required: true
+
+jobs:
+  default:
+    runs-on: ubuntu-latest
+    env:
+      extensions: intl, pcov
+      key: cache-v1
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup cache environment
+        id: extcache
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: ${{ env.extensions }}
+          key: ${{ env.key }}
+
+      - name: Cache extensions
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.extcache.outputs.dir }}
+          key: ${{ steps.extcache.outputs.key }}
+          restore-keys: ${{ steps.extcache.outputs.key }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          extensions: ${{ env.extensions }}
+          tools: composer:v2
+          coverage: none
+
+      - name: Install dependencies
+        uses: nick-invision/retry@v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 5
+          command: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
+
+      - name: Do test
+        run: php artisan simulate --user='${{ github.event.inputs.user }}' '${{ github.event.inputs.text }}'
