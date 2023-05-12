@@ -12,15 +12,15 @@ class Quotation
     /**
      * @var Collection
      */
-    private $list;
+    private Collection $list;
     /**
      * @var Slot
      */
-    private $slot;
+    private Slot $slot;
     /**
      * @var LINEBot
      */
-    private $line;
+    private LINEBot $line;
 
     public function __construct(LINEBot $line, Filesystem $storage, Slot $slot)
     {

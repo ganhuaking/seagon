@@ -14,18 +14,9 @@ use Throwable;
 
 class Talk
 {
-    private LINEBot $bot;
-
-    public function __construct(LINEBot $bot, InspireModel $inspire)
-    {
-        $this->bot = $bot;
-        $this->inspire = $inspire;
-    }
-
     public function __invoke(Request $request, Closure $next)
     {
         $text = trim($request->input('events.0.message.text'));
-        $replyToken = $request->input('events.0.replyToken');
 
         if (Str::startsWith($text, '師公聊聊')) {
             Log::debug('Talk handled');
@@ -60,9 +51,7 @@ EOL;
                 $reply = '師公聊聊壞了 你的問題';
             }
 
-            $textMessageBuilder = new TextMessageBuilder($reply);
-
-            return $this->bot->replyMessage($replyToken, $textMessageBuilder);
+            return new TextMessageBuilder($reply);
         }
 
         return $next($request);
