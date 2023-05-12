@@ -10,20 +10,9 @@ use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 
 class Stock
 {
-    /**
-     * @var LINEBot
-     */
-    private $bot;
-
-    public function __construct(LINEBot $bot)
-    {
-        $this->bot = $bot;
-    }
-
     public function __invoke(Request $request, Closure $next)
     {
         $text = trim($request->input('events.0.message.text'));
-        $replyToken = $request->input('events.0.replyToken');
 
         if ($this->keyword($text)) {
             Log::debug('Stock handled');
@@ -34,7 +23,7 @@ class Stock
                 $stockText = '舉例來說，我就買了富邦金，現在每年為我創造額外的股息收入來源';
             }
 
-            $textMessageBuilder = new TextMessageBuilder($stockText . "\n" . '本金...本金你不會自己想辦法賺嗎？
+            return new TextMessageBuilder($stockText . "\n" . '本金...本金你不會自己想辦法賺嗎？
 你不會自己跟銀行借錢嗎？
 你不會想辦法說服別人投資你或是請你操盤？
 你不會試者說服家人投資你之類或是家人借錢給你之類？
@@ -43,8 +32,6 @@ class Stock
 說穿還是看戲，看熱鬧而已...
 因為你只想找貪心且最便宜的方法去做!
 就算你有錢，你也沒那個屁股敢這樣玩啦，你敢帶種果斷執行？');
-
-            return $this->bot->replyMessage($replyToken, $textMessageBuilder);
         }
 
         return $next($request);
@@ -56,7 +43,7 @@ class Stock
      */
     private function keyword(string $text): bool
     {
-        return preg_match('/師公/', $text) && preg_match('/股票/', $text);
+        return str_contains($text, '師公') && str_contains($text, '股票');
     }
 
     /**

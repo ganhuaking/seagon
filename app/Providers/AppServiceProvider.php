@@ -36,7 +36,6 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(Theory::class, function () {
             return new Theory(
-                $this->app->make(LINEBot::class),
                 Storage::disk('local')
             );
         });
