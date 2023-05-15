@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Line;
 
+use App\Seagon\Middleware\Charm;
 use App\Seagon\Middleware\ChatGPT;
 use App\Seagon\Middleware\Image;
 use App\Seagon\Middleware\Inspire;
@@ -72,6 +73,7 @@ class Messaging
 
         $middleware = [
             Image::class,
+            Charm::class,
             Talk::class,
             Quotation::class,
             Inspire::class,

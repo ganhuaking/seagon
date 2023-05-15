@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Seagon\Middleware\Charm;
 use App\Seagon\Middleware\Image;
 use App\Seagon\Middleware\Inspire;
 use App\Seagon\Middleware\Quotation;
@@ -30,6 +31,7 @@ class Simulate extends Command
 
         $middleware = [
             Image::class,
+            Charm::class,
             Talk::class,
             Quotation::class,
             Inspire::class,
