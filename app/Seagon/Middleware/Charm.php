@@ -21,5 +21,7 @@ class Charm
 
             return new TextMessageBuilder('能力強/懂投資理財/會運動/會音樂/會看藝術/熱愛閱讀/有胸懷/参與愛心/非常頂級的好男生/重要的是又高又帥');
         }
+
+        return $next($request);
     }
 }
