@@ -41,16 +41,23 @@ class AntiFraud
 
     private function resolveShortUrl(string $url): string
     {
-        if (!Str::contains($url, [
-            'https://tinyurl.com/',
-        ])) {
+        if(!$this->isShortUrl($url)) {
             return $url;
         }
 
         try {
-            return (string)Http::head($url)->effectiveUri();
+            $location = Http::withoutRedirecting()->head($url)->header('Location');
+
+            return $this->resolveShortUrl($location);
         } catch (\Throwable) {
             return $url;
         }
+    }
+
+    private function isShortUrl(string $url): bool
+    {
+        return Str::contains($url, [
+            'https://tinyurl.com/',
+        ]);
     }
 }
