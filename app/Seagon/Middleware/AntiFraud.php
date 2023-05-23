@@ -59,6 +59,8 @@ class AntiFraud
                 $redirect = $response->header('target');
             }
 
+            Log::notice('Url parse header: ' . json_encode($response->headers()));
+
             return $this->resolveShortUrl($redirect);
         } catch (\Throwable $e) {
             Log::notice('Url parse error: ' . $e->getMessage(), [$e]);
