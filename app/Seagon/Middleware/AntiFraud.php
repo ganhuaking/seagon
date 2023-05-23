@@ -24,7 +24,7 @@ class AntiFraud
         if (count($matches[0]) > 0) {
             $urls = array_map(fn($url) => $this->resolveShortUrl($url), $matches[0]);
 
-            Log::notice('Url parse result', $urls);
+            Log::notice('Url parse result: ' . implode(', ', $urls));
 
             foreach ($urls as $url) {
                 $sensitive = [
