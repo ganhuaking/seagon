@@ -42,7 +42,7 @@ class AntiFraud
 
     private function resolveShortUrl(string $url): string
     {
-        if(!$this->isShortUrl($url)) {
+        if (!$this->isShortUrl($url)) {
             return $url;
         }
 
@@ -58,7 +58,9 @@ class AntiFraud
             }
 
             return $this->resolveShortUrl($redirect);
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
+            Log::notice('Url parse error: ' . $e->getMessage(), [$e]);
+
             return $url;
         }
     }
