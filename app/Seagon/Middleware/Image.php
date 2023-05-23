@@ -30,9 +30,11 @@ class Image
 
         Log::info('Image handled');
 
-        return new ImageMessageBuilder(
-            "https://seagon.shang-chuan.com/images/$imageId.jpg",
-            "https://seagon.shang-chuan.com/images/{$imageId}_thumb.jpg",
-        );
+        return [
+            new ImageMessageBuilder(
+                "https://seagon.shang-chuan.com/images/$imageId.jpg",
+                "https://seagon.shang-chuan.com/images/{$imageId}_thumb.jpg",
+            ),
+        ];
     }
 }

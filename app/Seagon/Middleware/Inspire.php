@@ -33,7 +33,9 @@ class Inspire
 
             $text = str_replace('%%user%%', '@' . $shemale, $this->inspire->random());
 
-            return new TextMessageBuilder($text);
+            return [
+                new TextMessageBuilder($text)
+            ];
         }
 
         if (Str::startsWith($text, '師公情話給')) {
@@ -41,7 +43,9 @@ class Inspire
 
             $text = str_replace('%%user%%', '@' . Str::replace('師公情話給', '', $text), $this->inspire->random());
 
-            return new TextMessageBuilder($text);
+            return [
+                new TextMessageBuilder($text)
+            ];
         }
 
         return $next($request);

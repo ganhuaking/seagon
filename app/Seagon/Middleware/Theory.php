@@ -29,7 +29,11 @@ class Theory
 
             $slot = json_decode($this->storage->get('slot.json'), true);
 
-            return new TextMessageBuilder(collect($slot['first_round'])->merge($slot['second_round'])->join(' '));
+            return [
+                new TextMessageBuilder(
+                    collect($slot['first_round'])->merge($slot['second_round'])->join(' ')
+                ),
+            ];
         }
 
         return $next($request);

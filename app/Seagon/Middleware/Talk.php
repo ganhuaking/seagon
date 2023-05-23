@@ -51,7 +51,9 @@ EOL;
                 $reply = '師公聊聊壞了 你的問題';
             }
 
-            return new TextMessageBuilder($reply);
+            return [
+                new TextMessageBuilder($reply)
+            ];
         }
 
         return $next($request);
