@@ -27,6 +27,7 @@ class AntiFraud
             foreach ($urls as $url) {
                 $sensitive = [
                     'u8961310',
+                    '%E5%86%A0%E5%BB%B7-%E9%99%B3-8a7aa6a7',
                     'eddiechen0801',
                 ];
 
@@ -50,7 +51,7 @@ class AntiFraud
                 ->withUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36')
                 ->get($url);
 
-            $redirect = $response->header('Location');
+            $redirect = $response->header('location');
 
             if (empty($redirect)) {
                 $redirect = $response->header('target');
