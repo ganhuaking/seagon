@@ -46,9 +46,17 @@ class AntiFraud
         }
 
         try {
-            $location = Http::withoutRedirecting()->head($url)->header('Location');
+            $response = Http::withoutRedirecting()
+                ->withUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36')
+                ->get($url);
 
-            return $this->resolveShortUrl($location);
+            $redirect = $response->header('Location');
+
+            if (empty($redirect)) {
+                $redirect = $response->header('target');
+            }
+
+            return $this->resolveShortUrl($redirect);
         } catch (\Throwable) {
             return $url;
         }
@@ -58,6 +66,7 @@ class AntiFraud
     {
         return Str::contains($url, [
             'https://tinyurl.com/',
+            'https://reurl.cc/',
         ]);
     }
 }
