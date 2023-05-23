@@ -16,7 +16,7 @@ class Inspire
         );
     }
 
-    public function random(): string
+    public function random(): mixed
     {
         return $this->list->random();
     }

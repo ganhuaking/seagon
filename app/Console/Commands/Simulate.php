@@ -71,16 +71,17 @@ class Simulate extends Command
             return Command::FAILURE;
         }
 
-        $buildMessage = $messageBuilder->buildMessage();
+        $messages = $messageBuilder->buildMessage();
 
-        if ($buildMessage[0]['type'] !== 'text') {
-            $this->error('TYPE IS NOT VALID: ' . $buildMessage[0]['type']);
-            return Command::FAILURE;
+        foreach($messages as $message) {
+            if ($message['type'] !== 'text') {
+                $this->error('TYPE IS NOT VALID: ' . $message['type']);
+            }
+
+            $this->line(
+                $message['text'],
+            );
         }
-
-        $this->line(
-            $buildMessage[0]['text'],
-        );
 
         return Command::SUCCESS;
     }
