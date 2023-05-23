@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Seagon\Middleware\AntiFraud;
 use App\Seagon\Middleware\Charm;
 use App\Seagon\Middleware\Image;
 use App\Seagon\Middleware\Inspire;
@@ -39,6 +40,7 @@ class Simulate extends Command
             Theory::class,
             Stock::class,
             Secret::class,
+            AntiFraud::class,
         ];
 
         // 製造假的 Request 物件

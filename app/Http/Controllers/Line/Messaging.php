@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Line;
 
+use App\Seagon\Middleware\AntiFraud;
 use App\Seagon\Middleware\Charm;
 use App\Seagon\Middleware\ChatGPT;
 use App\Seagon\Middleware\Image;
@@ -72,6 +73,7 @@ class Messaging
         }
 
         $middleware = [
+            AntiFraud::class,
             Image::class,
             Charm::class,
             Talk::class,
