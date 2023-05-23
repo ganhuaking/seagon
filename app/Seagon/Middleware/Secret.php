@@ -17,9 +17,7 @@ class Secret
         if ($this->keyword($text) && Random::threshold(80)) {
             Log::debug('Secret handled');
 
-            return [
-                new TextMessageBuilder('秘密')
-            ];
+            return new TextMessageBuilder('秘密');
         }
 
         return $next($request);

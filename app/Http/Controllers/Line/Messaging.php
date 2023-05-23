@@ -83,8 +83,8 @@ class Messaging
             Secret::class,
         ];
 
-        /** @var null|MessageBuilder[] $messageBuilders */
-        $messageBuilders = (new Pipeline(app()))
+        /** @var MessageBuilder $messageBuilder */
+        $messageBuilder = (new Pipeline(app()))
             ->send($request)
             ->through($middleware)
             ->then(function (Request $request) {
@@ -97,19 +97,17 @@ class Messaging
                 }
             });
 
-        if (empty($messageBuilders)) {
+        if (null === $messageBuilder) {
             return response()->noContent();
         }
 
-        foreach ($messageBuilders as $messageBuilder) {
-            $response = $bot->replyMessage(
-                $request->input('events.0.replyToken'),
-                $messageBuilder,
-            );
+        $response = $bot->replyMessage(
+            $request->input('events.0.replyToken'),
+            $messageBuilder,
+        );
 
-            if (isset($response) && !$response->isSucceeded()) {
-                Log::error('LINE return error: ' . $response->getRawBody());
-            }
+        if (isset($response) && !$response->isSucceeded()) {
+            Log::error('LINE return error: ' . $response->getRawBody());
         }
 
         return response()->noContent();

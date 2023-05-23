@@ -28,9 +28,7 @@ class Slot
         if ('師公第一人提出' === $text) {
             Log::debug('Slot handled');
 
-            return [
-                new TextMessageBuilder($this->slot->random()),
-            ];
+            return new TextMessageBuilder($this->slot->random());
         }
 
         return $next($request);

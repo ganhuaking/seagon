@@ -52,8 +52,8 @@ class Simulate extends Command
             ],
         ]);
 
-        /** @var null|MessageBuilder[] $messageBuilders */
-        $messageBuilders = (new Pipeline(app()))
+        /** @var MessageBuilder $messageBuilder */
+        $messageBuilder = (new Pipeline(app()))
             ->send($request)
             ->through($middleware)
             ->then(function (Request $request) {
@@ -66,20 +66,21 @@ class Simulate extends Command
                 }
             });
 
-        if (empty($messageBuilders)) {
+        if (null === $messageBuilder) {
             $this->error('NO MATCH');
             return Command::FAILURE;
         }
 
-        foreach ($messageBuilders as $messageBuilder) {
-            $buildMessage = $messageBuilder->buildMessage();
+        $buildMessage = $messageBuilder->buildMessage();
 
-            if ($buildMessage[0]['type'] !== 'text') {
-                $this->error('TYPE IS NOT VALID: ' . $buildMessage[0]['type']);
-            } else {
-                $this->line($buildMessage[0]['text'],);
-            }
+        if ($buildMessage[0]['type'] !== 'text') {
+            $this->error('TYPE IS NOT VALID: ' . $buildMessage[0]['type']);
+            return Command::FAILURE;
         }
+
+        $this->line(
+            $buildMessage[0]['text'],
+        );
 
         return Command::SUCCESS;
     }
