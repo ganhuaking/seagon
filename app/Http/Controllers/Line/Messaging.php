@@ -93,7 +93,9 @@ class Messaging
                 if (str_contains($text, '師公！')) {
                     Log::debug('Menu handled');
 
-                    return new TextMessageBuilder("想聽師公講什麼嗎？請輸入下面關鍵字讓師公來講講幹話\n\n1. 師公語錄\n2. 師公語錄話XX，XX關鍵字任你帶\n3. 師公第一人提出\n4. 師公專業\n5. 師公情話 / 師公情話給xx\n6. 師公聊聊XX");
+                    return [
+                        new TextMessageBuilder("想聽師公講什麼嗎？請輸入下面關鍵字讓師公來講講幹話\n\n1. 師公語錄\n2. 師公語錄話XX，XX關鍵字任你帶\n3. 師公第一人提出\n4. 師公專業\n5. 師公情話 / 師公情話給xx\n6. 師公聊聊XX"),
+                    ];
                 }
             });
 
