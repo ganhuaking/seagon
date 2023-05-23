@@ -26,37 +26,28 @@ class Inspire
     {
         $text = trim($request->input('events.0.message.text'));
 
+        $shemale = $this->shemale->random();
+
         if ('師公情話' === $text) {
             Log::debug('Inspire handled');
 
-            return $this->buildMessageBuilder($this->inspire->random(), $this->shemale->random());
+            $text = str_replace('%%user%%', '@' . $shemale, $this->inspire->random());
+
+            return [
+                new TextMessageBuilder($text)
+            ];
         }
 
         if (Str::startsWith($text, '師公情話給')) {
             Log::debug('Inspire to handled');
 
-            $replace = Str::replace('師公情話給', '', $text);
+            $text = str_replace('%%user%%', '@' . Str::replace('師公情話給', '', $text), $this->inspire->random());
 
-            return $this->buildMessageBuilder($this->inspire->random(), $replace);
+            return [
+                new TextMessageBuilder($text)
+            ];
         }
 
         return $next($request);
-    }
-
-    private function buildMessageBuilder(string | array $texts, string $target): array
-    {
-        if (is_string($texts)) {
-            $texts = [$texts];
-        }
-
-        $texts = array_map(
-            fn($text) => str_replace('%%user%%', '@' . $target, $text),
-            $texts,
-        );
-
-        return array_map(
-            fn($text) => new TextMessageBuilder($text),
-            $texts,
-        );
     }
 }
