@@ -72,8 +72,13 @@ class AntiFraud
     private function isShortUrl(string $url): bool
     {
         return Str::contains($url, [
-            'https://tinyurl.com/',
-            'https://reurl.cc/',
+            '/tinyurl.com/',
+            '/pse.is/',
+            '/is.gd/',
+            '/ssur.cc/',
+            '/reurl.cc/',       // Cry ah
+            '/lurl.cc/',        // Cry ah
+            '/bit.ly/',         // Cry ah
         ]);
     }
 }
