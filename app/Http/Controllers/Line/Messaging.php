@@ -120,6 +120,15 @@ class Messaging
         $seagonId = env('SEAGON_ID');
 
         $groupId = $request->input('events.0.source.groupId');
+
+        $ignoreGroup = [
+            'C5273a599868b4423212d07c11854e3bf',
+        ];
+
+        if (in_array($groupId, $ignoreGroup, true)) {
+            return;
+        }
+
         $group = match ($groupId) {
             'C67fc7032fb5c1cb77e276f3582710637' => 'Fork',
             'Cee77733c527ac65600a34e6d5c487517' => 'Origin',
