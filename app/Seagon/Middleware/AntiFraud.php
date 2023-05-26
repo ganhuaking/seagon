@@ -31,6 +31,7 @@ class AntiFraud
                     'u8961310',
                     '%E5%86%A0%E5%BB%B7-%E9%99%B3-8a7aa6a7',
                     'eddiechen0801',
+                    'eddie.chen.1800',
                 ];
 
                 if (Str::contains($url, $sensitive)) {
