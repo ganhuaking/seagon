@@ -42,34 +42,28 @@ class Messaging
             return response()->noContent();
         }
 
+        $allowList = [
+            'C67fc7032fb5c1cb77e276f3582710637',
+            'C5273a599868b4423212d07c11854e3bf',
+        ];
+
         // 確認白名單的群組
-        if ($list = env('LINE_MESSAGING_GROUP_ALLOW_LIST')) {
-            $notFound = true;
+        $notFound = true;
 
-            foreach (explode(',', $list) as $group) {
-                if ($request->input('events.0.source.groupId') === $group) {
-                    $notFound = false;
-                }
+        foreach ($allowList as $group) {
+            if ($request->input('events.0.source.groupId') === $group) {
+                $notFound = false;
+            }
+        }
+
+        // 不在白名單
+        if ($notFound) {
+            // UserID == Seagon
+            if ($seagonId === $request->input('events.0.source.userId')) {
+                // Nothing to do
             }
 
-            // 不在白名單
-            if ($notFound) {
-                // UserID == Seagon
-                if ($seagonId === $request->input('events.0.source.userId')) {
-                    $middleware = [
-                        ChatGPT::class,
-                    ];
-
-                    (new Pipeline(app()))
-                        ->send($request)
-                        ->through($middleware)
-                        ->then(function () {
-                            return null;
-                        });
-                }
-
-                return response()->noContent();
-            }
+            return response()->noContent();
         }
 
         $middleware = [
