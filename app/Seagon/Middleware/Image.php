@@ -14,6 +14,7 @@ class Image
         '錢從天降' => '000001',
         '文章有寫' => '000002',
         '元氣十足' => '000003',
+        '一支一支' => '000004',
     ];
 
     public function __invoke(Request $request, Closure $next)
