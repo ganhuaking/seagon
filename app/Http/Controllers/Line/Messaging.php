@@ -43,8 +43,9 @@ class Messaging
         }
 
         $allowList = [
-            'C67fc7032fb5c1cb77e276f3582710637',
+            // 'C67fc7032fb5c1cb77e276f3582710637',
             'C5273a599868b4423212d07c11854e3bf',
+            'C051cbea0ae0c33cb25c1e59261cb207a',
         ];
 
         // 確認白名單的群組
@@ -117,6 +118,7 @@ class Messaging
 
         $ignoreGroup = [
             'C5273a599868b4423212d07c11854e3bf',
+            'C051cbea0ae0c33cb25c1e59261cb207a',
         ];
 
         if (in_array($groupId, $ignoreGroup, true)) {
