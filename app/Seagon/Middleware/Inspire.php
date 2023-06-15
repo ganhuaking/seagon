@@ -40,6 +40,16 @@ class Inspire
             return $this->buildMessageBuilder($this->inspire->random(), $replace);
         }
 
+        if (preg_match('/^(\d+)師公情話給(.*)/', $text, $match)) {
+            Log::debug('Inspire to handled');
+
+            $texts = $this->inspire->get((int)$match[1]);
+
+            if (null !== $texts) {
+                return $this->buildMessageBuilder($texts, $match[2]);
+            }
+        }
+
         return $next($request);
     }
 

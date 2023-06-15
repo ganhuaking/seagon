@@ -20,4 +20,9 @@ class Inspire
     {
         return $this->list->random();
     }
+
+    public function get(int $index): mixed
+    {
+        return $this->list->get($index);
+    }
 }
