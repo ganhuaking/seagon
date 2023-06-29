@@ -26,13 +26,13 @@ class Inspire
     {
         $text = trim($request->input('events.0.message.text'));
 
-        if ('師公情話' === $text) {
+        if ('師公情話' === $text || '元元情話' === $text) {
             Log::debug('Inspire handled');
 
             return $this->buildMessageBuilder($this->inspire->random(), $this->shemale->random());
         }
 
-        if (Str::startsWith($text, '師公情話給')) {
+        if (Str::startsWith($text, '師公情話給') || Str::startsWith($text, '元元情話給')) {
             Log::debug('Inspire to handled');
 
             $replace = Str::replace('師公情話給', '', $text);
@@ -40,7 +40,8 @@ class Inspire
             return $this->buildMessageBuilder($this->inspire->random(), $replace);
         }
 
-        if (preg_match('/^(\d+)師公情話給(.*)/', $text, $match)) {
+        if (preg_match('/^(\d+)師公情話給(.*)/', $text, $match) || preg_match('/^(\d+)元元情話給(.*)/', $text,
+                $match)) {
             Log::debug('Inspire to handled');
 
             $texts = $this->inspire->get((int)$match[1]);
@@ -50,7 +51,7 @@ class Inspire
             }
         }
 
-        if (preg_match('/^(\d+)師公情話/', $text, $match)) {
+        if (preg_match('/^(\d+)師公情話/', $text, $match) || preg_match('/^(\d+)元元情話/', $text, $match)) {
             Log::debug('Inspire handled');
 
             $texts = $this->inspire->get((int)$match[1]);
