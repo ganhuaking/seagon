@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 專案概述
 
-Seagon 是一個基於 Laravel 9 的 LINE 聊天機器人，在 LINE 群組中提供互動功能。主要整合 LINE Bot SDK 和 OpenAI API。
+Seagon 是一個基於 Laravel 12 的 LINE 聊天機器人，在 LINE 群組中提供互動功能。主要整合 LINE Bot SDK 和 OpenAI API。
 
 ## 常用指令
 
@@ -14,7 +14,7 @@ make build          # 建置 Docker 映像
 make rebuild        # 重建映像（無快取）
 make up             # 啟動容器並查看日誌
 make down           # 停止容器並移除資料卷
-make server         # 本地啟動 Octane 伺服器
+make server         # 本地啟動開發伺服器
 
 # 測試
 php artisan test                          # 執行所有測試
@@ -67,7 +67,7 @@ AntiFraud → Image → Charm → Talk → Quotation → Inspire → Slot → Th
 
 ## 部署
 
-- **Docker**：基礎映像 `ghcr.io/104lab/lazy-octane:8.2`，含 PHP 8.2 + Laravel Octane
+- **Docker**：基礎映像 `php:8.4-apache`，含 PHP 8.4 + Apache
 
 ## 程式碼風格
 
