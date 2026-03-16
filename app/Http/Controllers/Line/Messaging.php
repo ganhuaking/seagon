@@ -146,10 +146,10 @@ class Messaging
     {
         $profile = $bot->getProfile($userId);
 
-        if (404 !== $profile->getHTTPStatus()) {
-            return $profile->getJSONDecodedBody()['displayName'];
-        } else {
-            return $userId;
+        if (200 === $profile->getHTTPStatus()) {
+            return $profile->getJSONDecodedBody()['displayName'] ?? $userId;
         }
+
+        return $userId;
     }
 }
